@@ -1,0 +1,4 @@
+knode
+=====
+
+diary
