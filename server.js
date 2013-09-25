@@ -1,8 +1,10 @@
 var http = require("http");
 var mysql = require('mysql2');
 var util = require('util');
-
+var os = require('os');
 var connection = mysql.createConnection({user:'root',database:'test',host:'localhost',password:'root'});
+var network_IP = os.networkInterfaces();
+network_IP = network_IP.eth0[0].address;
 
 // Build the server
 var app = http.createServer(function(request, response) {
@@ -22,9 +24,11 @@ var app = http.createServer(function(request, response) {
 			//response.write(rows[i].id + " " + rows[i].name + "<br/>" );
 		// }
 		 response.write("<br><b>browser info : </b>"+request.headers['user-agent']+"<br><b>accept : </b>"+request.headers['accept']+"<br> <b>Your IP: </b>"+ request.connection.remoteAddress);
-		console.log('request came from ip'+ request.connection.remoteAddress);
+		
+                console.log('request came from ip'+ request.connection.remoteAddress);
 		console.log('user-agent of request'+request.headers['user-agent']);
-       response.end("<pre>"+util.inspect(request)+"</pre>");
+ response.end();               
+      // response.end("<pre>"+util.inspect(request)+"</pre>");
        }
     });
 });
@@ -32,5 +36,8 @@ var app = http.createServer(function(request, response) {
 
 
 // Start that server, baby
-app.listen(1337, "192.168.2.249");
-console.log("Server running at http://192.168.2.249:1337/");
+var SERVER_PORT = 1337;
+app.listen(SERVER_PORT,""+network_IP );
+console.log("Server running at http://"+network_IP+":"+SERVER_PORT+"/");
+
+
